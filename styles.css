@@ -13,7 +13,7 @@ html, body {
 
 body {
   min-height: 100vh;
-  background: linear-gradient(135deg, #e9f3fb 50%, #ffffff 50%);
+  background: linear-gradient(45deg, #87ceeb 50%, #ffffff 50%);
   background-repeat: no-repeat;
   overflow-x: hidden;
 }
