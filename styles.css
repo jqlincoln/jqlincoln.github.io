@@ -25,7 +25,28 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+}
+
+.scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 110% 0%, rgba(173, 216, 230, .19), transparent 40%),
+              radial-gradient(circle at 30% 40%, rgba(255, 255, 255, .5), transparent 30%);
+}
+
+.scene::after {
+  content: '';
+  position: absolute;
+  left: -8%;
+  bottom: -2%;
+  width: 120%;
+  height: 56%;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f5f9 100%);
+  border-radius: 84% 16% 30% 70% / 50% 15% 42% 70%;
+  transform: rotate(-12deg);
+  box-shadow: inset 0 1px 25px rgba(0, 60, 92, 0.08), 0 30px 50px rgba(0,0,0,0.1);
 }
 
 .trees {
@@ -34,43 +55,112 @@ body {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  width: 120px;
+  width: 200px;
   height: 100%;
   z-index: 2;
 }
 
 .tree {
   position: relative;
-  width: 60px;
-  height: 80px;
-  background: linear-gradient(180deg, #228b22 0%, #32cd32 50%, #006400 100%);
-  border-radius: 50% 50% 0 0;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 10px;
+  width: 80px;
+  height: 120px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
-.tree::before {
-  content: '';
+.tree:hover {
+  transform: scale(1.05);
+}
+
+.tree:hover .leaves {
+  animation: rustle 0.6s ease-in-out infinite alternate;
+}
+
+.tree:hover .branches {
+  animation: sway 0.8s ease-in-out infinite alternate;
+}
+
+.trunk {
   position: absolute;
-  bottom: -20px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 8px;
+  width: 16px;
+  height: 40px;
+  background: linear-gradient(180deg, #8b4513 0%, #654321 50%, #4a2c17 100%);
+  border-radius: 8px 8px 2px 2px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.branches {
+  position: absolute;
+  bottom: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
   height: 20px;
-  background: #8b4513;
-  border-radius: 4px;
+}
+
+.branch {
+  position: absolute;
+  width: 20px;
+  height: 4px;
+  background: #654321;
+  border-radius: 2px;
+}
+
+.branch.left {
+  left: -10px;
+  transform: rotate(-15deg);
+}
+
+.branch.right {
+  right: -10px;
+  transform: rotate(15deg);
+}
+
+.leaves {
+  position: absolute;
+  bottom: 45px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 70px;
+}
+
+.leaf {
+  position: absolute;
+  width: 20px;
+  height: 30px;
+  background: linear-gradient(180deg, #228b22 0%, #32cd32 50%, #006400 100%);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  clip-path: ellipse(50% 70% at 50% 30%);
+}
+
+.leaf.leaf1 {
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-10deg);
+}
+
+.leaf.leaf2 {
+  bottom: 30px;
+  left: 25%;
+  transform: translateX(-50%) rotate(20deg);
+}
+
+.leaf.leaf3 {
+  bottom: 30px;
+  right: 25%;
+  transform: translateX(50%) rotate(-20deg);
 }
 
 .tree-label {
   position: absolute;
-  top: -30px;
+  bottom: -35px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: bold;
   color: #0e2e44;
   background: rgba(255, 255, 255, 0.9);
@@ -80,58 +170,128 @@ body {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.content {
+.content-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s ease;
+  z-index: 1000;
+}
+
+.content-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.zoomed-trunk {
   position: relative;
-  width: min(1120px, 92%);
-  background: rgba(255, 255, 255, 0.82);
-  border-radius: 1.2rem;
-  border: 1px solid rgba(14, 46, 68, 0.15);
-  backdrop-filter: blur(5px);
-  padding: clamp(1.2rem, 3vw, 2rem);
-  z-index: 1;
+  width: 300px;
+  height: 500px;
+  background: linear-gradient(180deg, #8b4513 0%, #654321 50%, #4a2c17 100%);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  animation: zoomIn 0.5s ease-out;
+  overflow: hidden;
 }
 
-h1 {
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
+.zoomed-trunk::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(139, 69, 19, 0.1) 0px,
+    rgba(139, 69, 19, 0.1) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+}
+
+.bark-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  text-align: center;
+  font-family: 'Special Elite', cursive;
+  color: #d2b48c;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
+.bark-text h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #f4e4bc;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.bark-text ul {
+  list-style: none;
+  padding: 0;
+}
+
+.bark-text li {
   margin-bottom: 0.8rem;
-  color: #0f3a64;
+  padding: 0.5rem;
+  background: rgba(210, 180, 140, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(210, 180, 140, 0.3);
 }
 
-p {
-  margin-bottom: 1.4rem;
-  line-height: 1.4;
-  color: #1d4f6f;
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
 }
 
-.cards {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+.close-btn:hover {
+  background: rgba(255, 255, 255, 1);
 }
 
-.card {
-  background: rgba(245, 253, 255, 0.92);
-  border-radius: 0.8rem;
-  border: 1px solid rgba(14, 46, 68, 0.11);
-  padding: 1rem;
-  box-shadow: 0 10px 30px rgba(16, 34, 61, 0.08);
+@keyframes rustle {
+  0% { transform: translateX(-2px) rotate(-1deg); }
+  100% { transform: translateX(2px) rotate(1deg); }
 }
 
-.card h2 {
-  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
-  margin-bottom: 0.65rem;
-  color: #164567;
+@keyframes sway {
+  0% { transform: rotate(-2deg); }
+  100% { transform: rotate(2deg); }
 }
 
-.card ul {
-  list-style: disc inside;
-  gap: 0.3rem;
-  display: grid;
-}
-
-.card li {
-  font-size: clamp(0.9rem, 1.8vw, 1rem);
-  color: #2f5f7f;
+@keyframes zoomIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

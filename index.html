@@ -5,47 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mountain Portfolio</title>
   <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
 </head>
 <body>
   <main class="scene">
-    <aside class="trees" aria-label="Section trees">
-      <div class="tree academics">
+    <div class="trees" aria-label="Section trees">
+      <div class="tree academics" onclick="showContent('academics')">
+        <div class="branches">
+          <div class="branch left"></div>
+          <div class="branch right"></div>
+        </div>
+        <div class="leaves">
+          <div class="leaf leaf1"></div>
+          <div class="leaf leaf2"></div>
+          <div class="leaf leaf3"></div>
+        </div>
+        <div class="trunk"></div>
         <span class="tree-label">Academics</span>
       </div>
-      <div class="tree work">
+      <div class="tree work" onclick="showContent('work')">
+        <div class="branches">
+          <div class="branch left"></div>
+          <div class="branch right"></div>
+        </div>
+        <div class="leaves">
+          <div class="leaf leaf1"></div>
+          <div class="leaf leaf2"></div>
+          <div class="leaf leaf3"></div>
+        </div>
+        <div class="trunk"></div>
         <span class="tree-label">Work Experience</span>
       </div>
-      <div class="tree hobbies">
+      <div class="tree hobbies" onclick="showContent('hobbies')">
+        <div class="branches">
+          <div class="branch left"></div>
+          <div class="branch right"></div>
+        </div>
+        <div class="leaves">
+          <div class="leaf leaf1"></div>
+          <div class="leaf leaf2"></div>
+          <div class="leaf leaf3"></div>
+        </div>
+        <div class="trunk"></div>
         <span class="tree-label">Hobbies</span>
       </div>
-    </aside>
-    <section class="content" aria-label="Mountain inspired profile">
-      <h1>Mountain Profile</h1>
-      <p>Side view of a freshly powdered hill. Sky in the top left, snow in the bottom right.</p>
-      <div class="cards">
-        <article class="card">
-          <h2>Academics</h2>
-          <ul>
-            <li>Placeholder: Where learning peaks.</li>
-            <li>Placeholder: Courses & projects.</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h2>Work Experience</h2>
-          <ul>
-            <li>Placeholder: Professional ascent.</li>
-            <li>Placeholder: Skills & roles.</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h2>Hobbies</h2>
-          <ul>
-            <li>Placeholder: Trail and snow sports.</li>
-            <li>Placeholder: Creative mountain hobbies.</li>
-          </ul>
-        </article>
+    </div>
+    <div id="content-overlay" class="content-overlay">
+      <div class="zoomed-trunk">
+        <div class="bark-text" id="bark-text"></div>
+        <button class="close-btn" onclick="closeContent()">×</button>
       </div>
-    </section>
+    </div>
   </main>
+  <script src="script.js"></script>
 </body>
 </html>
