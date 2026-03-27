@@ -1,101 +1,79 @@
-// Interactive tree content system
-const contentData = {
+// Content database for each tree category
+const categoryContent = {
   academics: {
-    title: "Academics",
+    title: 'Academics',
     items: [
-      "Bachelor of Science in Computer Science",
-      "University of Mountain Views - 2020-2024",
-      "GPA: 3.8/4.0",
-      "Relevant Coursework: Data Structures, Algorithms, Web Development"
+      'Placeholder: Where learning peaks.',
+      'Placeholder: Courses & projects.',
+      'Placeholder: Academic achievements.'
     ]
   },
   work: {
-    title: "Work Experience",
+    title: 'Work Experience',
     items: [
-      "Software Engineer at Peak Technologies",
-      "Full Stack Developer - 2024-Present",
-      "Developed mountain trail mapping application",
-      "Led team of 5 developers on cloud migration project"
+      'Placeholder: Professional ascent.',
+      'Placeholder: Skills & roles.',
+      'Placeholder: Career milestones.'
     ]
   },
   hobbies: {
-    title: "Hobbies",
+    title: 'Hobbies',
     items: [
-      "Backcountry skiing and snowboarding",
-      "Rock climbing and mountaineering",
-      "Trail running in alpine environments",
-      "Photography of mountain landscapes",
-      "Building custom hiking gear"
+      'Placeholder: Trail and snow sports.',
+      'Placeholder: Creative mountain hobbies.',
+      'Placeholder: Outdoor adventures.'
     ]
   }
 };
 
+// Show content overlay with zoomed trunk
 function showContent(category) {
   const overlay = document.getElementById('content-overlay');
   const barkText = document.getElementById('bark-text');
+  const content = categoryContent[category];
 
-  // Clear previous content
-  barkText.innerHTML = '';
+  if (!content) return;
 
-  // Add content for the selected category
-  const data = contentData[category];
-  if (data) {
-    barkText.innerHTML = `
-      <h2>${data.title}</h2>
-      <ul>
-        ${data.items.map(item => `<li>${item}</li>`).join('')}
-      </ul>
-    `;
-  }
+  // Build HTML for bark text
+  let html = `<h2>${content.title}</h2>`;
+  html += '<ul>';
+  content.items.forEach(item => {
+    html += `<li>${item}</li>`;
+  });
+  html += '</ul>';
 
+  barkText.innerHTML = html;
+  
   // Show overlay with animation
   overlay.classList.add('active');
-
-  // Add click outside to close
-  overlay.addEventListener('click', function closeOnOutside(e) {
-    if (e.target === overlay) {
-      closeContent();
-      overlay.removeEventListener('click', closeOnOutside);
-    }
-  });
+  
+  // Add rustle animation to the tree being clicked
+  event.target.closest('.tree').style.animation = 'none';
+  setTimeout(() => {
+    event.target.closest('.tree').style.animation = '';
+  }, 10);
 }
 
+// Close content overlay
 function closeContent() {
   const overlay = document.getElementById('content-overlay');
   overlay.classList.remove('active');
 }
 
-// Add keyboard support for accessibility
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    closeContent();
-  }
-});
-
-// Add subtle tree animations on page load
-document.addEventListener('DOMContentLoaded', function() {
-  const trees = document.querySelectorAll('.tree');
-
-  trees.forEach((tree, index) => {
-    // Stagger the initial animation
-    setTimeout(() => {
-      tree.style.animation = 'growIn 0.8s ease-out forwards';
-    }, index * 200);
+// Close on overlay click (outside the trunk)
+document.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('content-overlay');
+  
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      closeContent();
+    }
+  });
+  
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeContent();
+    }
   });
 });
-
-// Add CSS animation for tree growth
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes growIn {
-    0% {
-      transform: scale(0.8);
-      opacity: 0;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-`;
-document.head.appendChild(style);
