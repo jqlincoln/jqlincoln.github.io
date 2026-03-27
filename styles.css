@@ -53,9 +53,11 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
-  width: 200px;
+  gap: 20px;
+  padding-top: 48px;
+  width: 180px;
   height: 100%;
   z-index: 2;
 }
@@ -63,96 +65,53 @@ body {
 .tree {
   position: relative;
   width: 80px;
-  height: 120px;
+  min-height: 140px;
   cursor: pointer;
   transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .tree:hover {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
-.tree:hover .leaves {
-  animation: rustle 0.6s ease-in-out infinite alternate;
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 50px solid #006400;
+  position: absolute;
+  left: 0;
 }
 
-.tree:hover .branches {
-  animation: sway 0.8s ease-in-out infinite alternate;
+.layer1 {
+  top: 10px;
+  border-bottom-color: #006400;
+}
+
+.layer2 {
+  top: 30px;
+  border-bottom-color: #228B22;
+}
+
+.layer3 {
+  top: 50px;
+  border-bottom-color: #32CD32;
 }
 
 .trunk {
   position: absolute;
-  bottom: 0;
+  bottom: 1px;
   left: 50%;
   transform: translateX(-50%);
   width: 16px;
   height: 40px;
-  background: linear-gradient(180deg, #8b4513 0%, #654321 50%, #4a2c17 100%);
-  border-radius: 8px 8px 2px 2px;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-}
-
-.branches {
-  position: absolute;
-  bottom: 35px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 20px;
-}
-
-.branch {
-  position: absolute;
-  width: 20px;
-  height: 4px;
-  background: #654321;
-  border-radius: 2px;
-}
-
-.branch.left {
-  left: -10px;
-  transform: rotate(-15deg);
-}
-
-.branch.right {
-  right: -10px;
-  transform: rotate(15deg);
-}
-
-.leaves {
-  position: absolute;
-  bottom: 45px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70px;
-  height: 70px;
-}
-
-.leaf {
-  position: absolute;
-  width: 20px;
-  height: 30px;
-  background: linear-gradient(180deg, #228b22 0%, #32cd32 50%, #006400 100%);
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  clip-path: ellipse(50% 70% at 50% 30%);
-}
-
-.leaf.leaf1 {
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%) rotate(-10deg);
-}
-
-.leaf.leaf2 {
-  bottom: 30px;
-  left: 25%;
-  transform: translateX(-50%) rotate(20deg);
-}
-
-.leaf.leaf3 {
-  bottom: 30px;
-  right: 25%;
-  transform: translateX(50%) rotate(-20deg);
+  background: #8B4513;
+  border-radius: 5px;
+  box-shadow: inset 0 2px 3px rgba(0,0,0,0.2);
 }
 
 .tree-label {
