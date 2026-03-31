@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alpine Lake - Alt Design 3</title>
+  <link rel="stylesheet" href="alt3.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="scene">
+    <div class="landscape">
+      <svg class="sky-svg" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="sun" cx="80%" cy="20%">
+            <stop offset="0%" style="stop-color:#fffacd;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#ffeb99;stop-opacity:0" />
+          </radialGradient>
+        </defs>
+        <circle cx="680" cy="80" r="50" fill="url(#sun)" />
+      </svg>
+      
+      <div class="mountain-range">
+        <div class="peak academics" onclick="showContent('academics')">
+          <div class="peak-shape"></div>
+          <div class="peak-label">Academics</div>
+        </div>
+        <div class="peak work" onclick="showContent('work')">
+          <div class="peak-shape"></div>
+          <div class="peak-label">Work</div>
+        </div>
+        <div class="peak hobbies" onclick="showContent('hobbies')">
+          <div class="peak-shape"></div>
+          <div class="peak-label">Hobbies</div>
+        </div>
+      </div>
+      
+      <div class="lake">
+        <div class="reflection">
+          <div class="mirror-peak academics-mirror">
+            <div class="peak-shape"></div>
+          </div>
+          <div class="mirror-peak work-mirror">
+            <div class="peak-shape"></div>
+          </div>
+          <div class="mirror-peak hobbies-mirror">
+            <div class="peak-shape"></div>
+          </div>
+        </div>
+        <div class="water-ripple"></div>
+      </div>
+    </div>
+    
+    <div id="content-overlay" class="content-overlay">
+      <div class="alpine-card">
+        <div class="card-scroll" id="card-scroll"></div>
+        <button class="close-btn" onclick="closeContent()">×</button>
+      </div>
+    </div>
+  </main>
+  <script src="alt3.js"></script>
+</body>
+</html>
