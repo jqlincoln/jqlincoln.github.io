@@ -1,0 +1,50 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html,body { height:100%; }
+body { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background: #ffffff; color: #123; }
+.stage { position: relative; width:100%; height:100vh; overflow:hidden; }
+.scene { width:100%; height:100%; display:block; }
+
+/* make svg scale to window */
+.scene { width:100%; height:100%; }
+
+/* tree hover subtle lift */
+.tree { cursor: pointer; transition: transform 220ms cubic-bezier(.2,.9,.3,1); }
+.tree:hover { transform: translateY(-6px); }
+
+/* trunk style - used when zooming (JS clones same color) */
+.trunk { rx:2; }
+
+/* zoom-root: full-screen element used to animate trunk -> full-screen */
+#zoom-root { position: fixed; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:999; }
+.zoom-trunk {
+  position:absolute;
+  width:40px; height:80px;
+  border-radius:8px;
+  background:#6b3d18;
+  box-shadow: inset 0 3px 0 rgba(255,255,255,0.05), 0 20px 60px rgba(0,0,0,0.25);
+  transform-origin: center center;
+  will-change: transform, width, height, left, top, border-radius;
+}
+
+/* etched text style */
+.bark-etched { font-family: 'Special Elite', cursive; color:#dbc59b; text-align:center; padding:3rem; line-height:1.6; font-size:1.2rem; }
+.bark-etched h2{ font-size:2rem; margin-bottom:1rem; color:#f4e4bc }
+
+/* when zoomed: trunk fills screen and shows content */
+.zoom-trunk.fullscreen { left:0 !important; top:0 !important; width:100% !important; height:100% !important; border-radius:0 !important; }
+
+/* hidden at first */
+.bark-etched { display:none; }
+.zoom-trunk.fullscreen .bark-etched { display:block; }
+
+/* mobile adjustments */
+@media (max-width:700px){ .bark-etched{ font-size:1rem; padding:1.2rem } }
+
+/* subtle path stroke saturation */
+#path { opacity:0.95 }
+
+/* ensure snow shape visible */
+#snow{ box-shadow: 0 30px 60px rgba(0,0,0,0.06) }
+
+/* accessibility reduced motion */
+@media (prefers-reduced-motion: reduce){ .tree, .zoom-trunk { transition: none !important; } }
