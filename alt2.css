@@ -1,16 +1,105 @@
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,Arial,Helvetica,sans-serif;background:#fff;height:100vh;}
-.wrap{position:fixed;inset:0;width:100%;height:100%;overflow:hidden}
-.scene{width:100%;height:100%;display:block}
-.tree{cursor:pointer;transition:transform .22s cubic-bezier(.2,.9,.3,1)}
-.tree:hover{transform:translateY(-6px)}
-#zoom-root{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:999}
-.zoom-trunk{position:absolute;width:20px;height:48px;border-radius:6px;background:#6b3d18;box-shadow:0 20px 50px rgba(0,0,0,.25);overflow:hidden;will-change:left,top,width,height,transform}
-.zoom-trunk.fullscreen{left:0 !important;top:0 !important;width:100% !important;height:100% !important;border-radius:0}
-.bark-etched{font-family:'Special Elite',cursive;color:#e1c89d;padding:3rem;text-align:center;display:block;opacity:0;transition:opacity 220ms ease}
-.zoom-trunk.fullscreen .bark-etched{opacity:1}
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
 
-/* ski track styling */
-#ski-track{
-	pointer-events: none;
-	opacity: 0.95;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #1a0f0a;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.wrap {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* The SVG scene — JS drives all transforms */
+.scene {
+  width: 100%;
+  height: 100%;
+  display: block;
+  will-change: transform;
+}
+
+/* ── Tree hover: rustle the branches ── */
+.tree { cursor: pointer; }
+
+@keyframes rustle {
+  0%   { transform: rotate(0deg); }
+  15%  { transform: rotate(1.8deg); }
+  30%  { transform: rotate(-1.4deg); }
+  45%  { transform: rotate(1.1deg); }
+  60%  { transform: rotate(-0.8deg); }
+  75%  { transform: rotate(0.4deg); }
+  90%  { transform: rotate(-0.2deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.tree .foliage {
+  transform-origin: 0px 128px; /* anchor at trunk top in local coords */
+  transform-box: fill-box;
+}
+.tree:hover .foliage {
+  animation: rustle 0.7s ease-in-out forwards;
+}
+
+/* ── Etched SVG text on trunks ──
+   At normal view these are invisible (font-size ~0.4px in screen space).
+   As the scene zooms in 35×, they become legible — no overlay needed. */
+.etched-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 4px;
+  font-weight: 600;
+  fill: #f5e6c8;
+  letter-spacing: 0.3px;
+  opacity: 0.92;
+}
+
+.etched-item {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 3px;
+  font-weight: 400;
+  font-style: italic;
+  fill: #ddc9a0;
+  letter-spacing: 0.2px;
+  opacity: 0.85;
+}
+
+/* ── Zoom overlay — only used for close hint now ── */
+#zoom-root {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.bark-panel {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 2.5rem;
+  pointer-events: all;
+  opacity: 0;
+  transition: opacity 300ms ease 600ms;
+}
+
+.bark-panel.visible { opacity: 1; }
+
+.close-hint {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.78rem;
+  color: rgba(240, 220, 180, 0.5);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ski track */
+#ski-track {
+  pointer-events: none;
+  opacity: 0.95;
 }
