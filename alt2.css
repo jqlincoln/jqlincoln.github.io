@@ -29,12 +29,9 @@ body {
 
 @keyframes rustle {
   0%   { transform: rotate(0deg); }
-  15%  { transform: rotate(1.8deg); }
-  30%  { transform: rotate(-1.4deg); }
-  45%  { transform: rotate(1.1deg); }
-  60%  { transform: rotate(-0.8deg); }
-  75%  { transform: rotate(0.4deg); }
-  90%  { transform: rotate(-0.2deg); }
+  25%  { transform: rotate(0.8deg); }
+  55%  { transform: rotate(-0.5deg); }
+  80%  { transform: rotate(0.2deg); }
   100% { transform: rotate(0deg); }
 }
 
@@ -43,7 +40,7 @@ body {
   transform-box: fill-box;
 }
 .tree:hover .foliage {
-  animation: rustle 0.7s ease-in-out forwards;
+  animation: rustle 0.5s ease-in-out forwards;
 }
 
 /* ── Etched SVG text on trunks ──

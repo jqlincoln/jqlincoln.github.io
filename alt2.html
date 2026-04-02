@@ -11,62 +11,37 @@
 <main class="wrap">
   <svg id="main-scene" viewBox="0 0 1200 800" class="scene" preserveAspectRatio="xMidYMid slice">
     <defs>
-      <!-- Bark pattern — filled at runtime by JS using a hi-res canvas -->
       <pattern id="bark-pattern" patternUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">
         <image id="bark-pattern-img" x="0" y="0" width="200" height="200"/>
       </pattern>
-
-      <!-- Bark gradient overlay for trunks (side shading) -->
       <linearGradient id="trunk-grad" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0%"   stop-color="#1a0a02" stop-opacity="0.45"/>
         <stop offset="40%"  stop-color="#7a4220" stop-opacity="0"/>
         <stop offset="100%" stop-color="#1a0a02" stop-opacity="0.35"/>
       </linearGradient>
-
-      <!-- Softly fades the bottom edge of the trunk -->
       <linearGradient id="trunk-base-fade" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%"   stop-color="#3d1a08" stop-opacity="0"/>
         <stop offset="100%" stop-color="#3d1a08" stop-opacity="0.6"/>
       </linearGradient>
-
-      <!-- Gentle shadow puddle at ground level -->
       <radialGradient id="ground-shadow" cx="50%" cy="50%" r="50%">
         <stop offset="0%"   stop-color="#1a0a02" stop-opacity="0.25"/>
         <stop offset="55%"  stop-color="#1a0a02" stop-opacity="0.08"/>
         <stop offset="100%" stop-color="#1a0a02" stop-opacity="0"/>
       </radialGradient>
-
-      <!-- Clip each trunk's etched text to stay within trunk bounds -->
-      <clipPath id="trunk-clip-hobbies">
-        <rect x="-9" y="98" width="18" height="48"/>
-      </clipPath>
-      <clipPath id="trunk-clip-academics">
-        <rect x="-9" y="98" width="18" height="48"/>
-      </clipPath>
-      <clipPath id="trunk-clip-work">
-        <rect x="-9" y="98" width="18" height="48"/>
-      </clipPath>
     </defs>
 
-    <!-- Large bark-colored backdrop — visible when scene scales up beyond viewport -->
-    <rect id="bark-backdrop" x="-5000" y="-5000" width="11200" height="10800" fill="#7a3e18"/>
-
-    <!-- Sky -->
+    <rect id="bark-backdrop" x="-5000" y="-5000" width="11200" height="10800" fill="#8c4e22"/>
     <rect width="1200" height="400" fill="#6dd1ff"/>
-
-    <!-- Snow ground -->
     <path d="M0,350 C180,300 420,320 700,260 C980,200 1250,260 1250,260 L1250,900 L0,900 Z" fill="#fff"/>
-
-    <!-- Ski track -->
     <path id="ski-track"
       d="M700,280 C720,350 860,310 800,370 C740,430 820,490 940,490 C1060,490 1130,520 1000,640 C820,780 400,720 320,780"
       fill="none" stroke="#c6c6c6" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
 
     <!-- ── Tree: Hobbies ── -->
-    <g class="tree" data-key="hobbies" data-trunk-cx="120" data-trunk-cy="545">
+    <!-- trunk centre in world coords: translate(120,390) + local(0, 128+24) = world(120, 542) -->
+    <g class="tree" data-key="hobbies" data-trunk-cx="120" data-trunk-cy="542">
       <g class="tree-body">
         <g transform="translate(120,390)">
-          <!-- Taller foliage — extended vertically -->
           <g class="foliage">
             <polygon points="0,-20 -28,48 28,48"   fill="#44c962"/>
             <polygon points="0,18  -38,76 38,76"   fill="#3dbb5b"/>
@@ -77,19 +52,18 @@
           <rect class="trunk" x="-9" y="128" width="18" height="48" fill="url(#bark-pattern)"/>
           <rect x="-9" y="128" width="18" height="48" fill="url(#trunk-grad)"/>
           <rect x="-9" y="162" width="18" height="14" fill="url(#trunk-base-fade)"/>
-          <!-- Etched text — lives on the trunk, scales with the zoom -->
-          <g class="trunk-label" clip-path="url(#trunk-clip-hobbies)" transform="translate(0,128)">
-            <text class="etched-title" x="0" y="16" text-anchor="middle">Hobbies</text>
-            <text class="etched-item"  x="0" y="26" text-anchor="middle">Skiing</text>
-            <text class="etched-item"  x="0" y="34" text-anchor="middle">Photography</text>
-            <text class="etched-item"  x="0" y="42" text-anchor="middle">Painting</text>
-          </g>
+          <!-- Text sits in trunk-local space: y=128 is trunk top, y=176 is trunk bottom -->
+          <text class="etched-title" x="0" y="140" text-anchor="middle">Hobbies</text>
+          <text class="etched-item"  x="0" y="150" text-anchor="middle">Skiing</text>
+          <text class="etched-item"  x="0" y="158" text-anchor="middle">Photography</text>
+          <text class="etched-item"  x="0" y="166" text-anchor="middle">Painting</text>
         </g>
       </g>
     </g>
 
     <!-- ── Tree: Academics ── -->
-    <g class="tree" data-key="academics" data-trunk-cx="460" data-trunk-cy="505">
+    <!-- trunk centre: translate(460,350) + local(0, 128+24) = world(460, 502) -->
+    <g class="tree" data-key="academics" data-trunk-cx="460" data-trunk-cy="502">
       <g class="tree-body">
         <g transform="translate(460,350)">
           <g class="foliage">
@@ -102,18 +76,17 @@
           <rect class="trunk" x="-9" y="128" width="18" height="48" fill="url(#bark-pattern)"/>
           <rect x="-9" y="128" width="18" height="48" fill="url(#trunk-grad)"/>
           <rect x="-9" y="162" width="18" height="14" fill="url(#trunk-base-fade)"/>
-          <g class="trunk-label" clip-path="url(#trunk-clip-academics)" transform="translate(0,128)">
-            <text class="etched-title" x="0" y="16" text-anchor="middle">Academics</text>
-            <text class="etched-item"  x="0" y="26" text-anchor="middle">Degree</text>
-            <text class="etched-item"  x="0" y="34" text-anchor="middle">Thesis</text>
-            <text class="etched-item"  x="0" y="42" text-anchor="middle">Courses</text>
-          </g>
+          <text class="etched-title" x="0" y="140" text-anchor="middle">Academics</text>
+          <text class="etched-item"  x="0" y="150" text-anchor="middle">Degree</text>
+          <text class="etched-item"  x="0" y="158" text-anchor="middle">Thesis</text>
+          <text class="etched-item"  x="0" y="166" text-anchor="middle">Courses</text>
         </g>
       </g>
     </g>
 
     <!-- ── Tree: Work ── -->
-    <g class="tree" data-key="work" data-trunk-cx="290" data-trunk-cy="635">
+    <!-- trunk centre: translate(290,490) + local(0, 128+24) = world(290, 642) -->
+    <g class="tree" data-key="work" data-trunk-cx="290" data-trunk-cy="642">
       <g class="tree-body">
         <g transform="translate(290,490)">
           <g class="foliage">
@@ -126,12 +99,10 @@
           <rect class="trunk" x="-9" y="128" width="18" height="48" fill="url(#bark-pattern)"/>
           <rect x="-9" y="128" width="18" height="48" fill="url(#trunk-grad)"/>
           <rect x="-9" y="162" width="18" height="14" fill="url(#trunk-base-fade)"/>
-          <g class="trunk-label" clip-path="url(#trunk-clip-work)" transform="translate(0,128)">
-            <text class="etched-title" x="0" y="16" text-anchor="middle">Work</text>
-            <text class="etched-item"  x="0" y="26" text-anchor="middle">Job</text>
-            <text class="etched-item"  x="0" y="34" text-anchor="middle">Projects</text>
-            <text class="etched-item"  x="0" y="42" text-anchor="middle">Skills</text>
-          </g>
+          <text class="etched-title" x="0" y="140" text-anchor="middle">Work</text>
+          <text class="etched-item"  x="0" y="150" text-anchor="middle">Job</text>
+          <text class="etched-item"  x="0" y="158" text-anchor="middle">Projects</text>
+          <text class="etched-item"  x="0" y="166" text-anchor="middle">Skills</text>
         </g>
       </g>
     </g>
