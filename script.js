@@ -1,81 +1,161 @@
-// Interactive zoom-into-trunk behavior
-const data = {
-  hobbies: { title: 'Hobbies', items: ['Placeholder: Ski touring', 'Placeholder: Mountain photography', 'Placeholder: Trail running'] },
-  academics: { title: 'Academics', items: ['Placeholder: Degree X', 'Placeholder: Research Y', 'Placeholder: Projects'] },
-  work: { title: 'Work', items: ['Placeholder: Role A', 'Placeholder: Company B', 'Placeholder: Achievements'] }
-};
+// ─── Hi-res bark texture via canvas ──────────────────────────────────────────
+// 1024×1024 procedural bark — sharp at any zoom level
 
-function createBarkHTML(category){
-  const c = data[category];
-  if(!c) return '<div></div>';
-  let html = `<div class="bark-etched"><h2>${c.title}</h2><ul>`;
-  c.items.forEach(i=> html += `<li>${i}</li>`);
-  html += '</ul></div>';
-  return html;
+function generateBarkTexture() {
+  const SIZE = 1024
+  const c = document.createElement('canvas')
+  c.width = SIZE; c.height = SIZE
+  const ctx = c.getContext('2d')
+
+  // Lighter warm base
+  const bg = ctx.createLinearGradient(0, 0, SIZE, 0)
+  bg.addColorStop(0,    '#5a2e0e')
+  bg.addColorStop(0.15, '#8c4e22')
+  bg.addColorStop(0.35, '#a85e2a')
+  bg.addColorStop(0.5,  '#9a5224')
+  bg.addColorStop(0.65, '#b06030')
+  bg.addColorStop(0.85, '#8c4e22')
+  bg.addColorStop(1,    '#5a2e0e')
+  ctx.fillStyle = bg
+  ctx.fillRect(0, 0, SIZE, SIZE)
+
+  // Vertical bark ridges
+  for (let i = 0; i < 42; i++) {
+    const x = (i / 42) * SIZE + (Math.random() - 0.5) * 18
+    const w = 3 + Math.random() * 12
+    const light = Math.random()
+    ctx.beginPath()
+    ctx.moveTo(x, 0)
+    for (let y = 0; y <= SIZE; y += 36) {
+      ctx.lineTo(x + (Math.random() - 0.5) * 7, y)
+    }
+    ctx.lineWidth = w
+    ctx.strokeStyle = light > 0.55
+      ? `rgba(210,140,70,${0.1 + Math.random() * 0.2})`
+      : `rgba(20,8,2,${0.12 + Math.random() * 0.22})`
+    ctx.stroke()
+  }
+
+  // Horizontal fissures
+  for (let i = 0; i < 55; i++) {
+    const y = Math.random() * SIZE
+    const len = 25 + Math.random() * 160
+    let cx2 = Math.random() * SIZE
+    ctx.beginPath()
+    ctx.moveTo(cx2, y)
+    for (let s = 0; s < len; s += 10) {
+      cx2 += (Math.random() - 0.38) * 10
+      ctx.lineTo(cx2, y + (Math.random() - 0.5) * 3.5)
+    }
+    ctx.lineWidth = 0.4 + Math.random() * 1.4
+    ctx.strokeStyle = `rgba(15,6,2,${0.18 + Math.random() * 0.28})`
+    ctx.stroke()
+  }
+
+  // Fine grain noise
+  const imageData = ctx.getImageData(0, 0, SIZE, SIZE)
+  const d = imageData.data
+  for (let i = 0; i < d.length; i += 4) {
+    const n = (Math.random() - 0.5) * 22
+    d[i]   = Math.max(0, Math.min(255, d[i]   + n))
+    d[i+1] = Math.max(0, Math.min(255, d[i+1] + n * 0.55))
+    d[i+2] = Math.max(0, Math.min(255, d[i+2] + n * 0.18))
+  }
+  ctx.putImageData(imageData, 0, 0)
+
+  return c.toDataURL('image/png')
 }
 
-// handle clicks
-document.addEventListener('click', (e)=>{
-  const t = e.target.closest('.tree');
-  if(!t) return;
-  // prevent double clicks
-  if(t.dataset.locked) return;
-  t.dataset.locked = '1';
+// Inject into SVG pattern + backdrop
+const barkDataURL = generateBarkTexture()
+document.getElementById('bark-pattern-img').setAttribute('href', barkDataURL)
+document.getElementById('bark-backdrop').setAttribute('fill', '#8c4e22')
 
-  const key = t.dataset.key;
-  // find trunk rect inside svg and compute screen coords
-  const trunk = t.querySelector('.trunk');
-  const trunkBBox = trunk.getBoundingClientRect();
+// ─── Content ──────────────────────────────────────────────────────────────────
+// (kept for reference; actual display is now SVG text on each trunk)
+const content = {
+  hobbies:  { title: 'Hobbies',   items: ['Skiing', 'Photography', 'Painting'] },
+  academics:{ title: 'Academics', items: ['Degree', 'Thesis',      'Courses']  },
+  work:     { title: 'Work',      items: ['Job',    'Projects',    'Skills']   }
+}
 
-  // create zoom trunk element
-  const zoomRoot = document.getElementById('zoom-root');
-  zoomRoot.innerHTML = '';
-  const z = document.createElement('div');
-  z.className = 'zoom-trunk';
-  // place at trunk center
-  z.style.left = (trunkBBox.left + window.scrollX) + 'px';
-  z.style.top = (trunkBBox.top + window.scrollY) + 'px';
-  z.style.width = trunkBBox.width + 'px';
-  z.style.height = trunkBBox.height + 'px';
-  // small transform to center
-  z.style.transform = 'translate(-50%,-50%) scale(1)';
+// ─── Scene refs ───────────────────────────────────────────────────────────────
+const scene    = document.getElementById('main-scene')
+const zoomRoot = document.getElementById('zoom-root')
 
-  // add etched content inside
-  z.innerHTML = createBarkHTML(key);
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function svgToViewport(svgX, svgY) {
+  const pt = scene.createSVGPoint()
+  pt.x = svgX; pt.y = svgY
+  return pt.matrixTransform(scene.getScreenCTM())
+}
 
-  zoomRoot.appendChild(z);
+function zoomSceneTo(svgX, svgY, scale, durationMs) {
+  const target = svgToViewport(svgX, svgY)
+  const cx = window.innerWidth  / 2
+  const cy = window.innerHeight / 2
+  const tx = cx - target.x
+  const ty = cy - target.y
+  scene.style.transition      = 'transform ' + durationMs + 'ms cubic-bezier(.22,.9,.3,1)'
+  scene.style.transformOrigin = target.x + 'px ' + target.y + 'px'
+  scene.style.transform       = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')'
+}
 
-  // force reflow then animate to fullscreen
-  requestAnimationFrame(()=>{
-    // compute center offset transform so it animates smoothly
-    z.style.transition = 'all 700ms cubic-bezier(.22,.9,.3,1)';
-    // expand to cover viewport
-    z.classList.add('fullscreen');
+function resetScene(durationMs) {
+  scene.style.transition = 'transform ' + (durationMs || 500) + 'ms cubic-bezier(.4,0,.2,1)'
+  scene.style.transform  = 'none'
+}
 
-    // after transition, keep content visible and enable close
-    z.addEventListener('transitionend', function onEnd(ev){
-      z.removeEventListener('transitionend', onEnd);
-      z.style.pointerEvents = 'auto';
-      // make sure Close on click or Escape
-      document.addEventListener('keydown', escClose);
-      z.addEventListener('click', shrink);
-    });
-  });
+// ─── State ────────────────────────────────────────────────────────────────────
+let isZoomed = false
 
-  function escClose(e){ if(e.key==="Escape") shrink(); }
+// ─── Click handler ────────────────────────────────────────────────────────────
+document.addEventListener('click', function(e) {
 
-  function shrink(){
-    // remove listeners
-    document.removeEventListener('keydown', escClose);
-    z.removeEventListener('click', shrink);
-    // animate back
-    z.classList.remove('fullscreen');
-    z.style.transition = 'all 500ms ease';
-    z.addEventListener('transitionend', function tidy(){
-      // cleanup
-      zoomRoot.innerHTML = '';
-      delete t.dataset.locked;
-      z.removeEventListener('transitionend', tidy);
-    });
+  // If already zoomed, any click closes
+  if (isZoomed) return
+
+  const tree = e.target.closest('.tree')
+  if (!tree) return
+
+  isZoomed = true
+  const trunkCx = parseFloat(tree.dataset.trunkCx)
+  const trunkCy = parseFloat(tree.dataset.trunkCy)
+
+  // Zoom the whole scene — text lives inside SVG so it zooms with it
+  zoomSceneTo(trunkCx, trunkCy, 35, 850)
+
+  // Show a subtle close hint after zoom settles
+  zoomRoot.innerHTML = ''
+  const panel = document.createElement('div')
+  panel.className = 'bark-panel'
+  panel.innerHTML = '<p class="close-hint">click anywhere &nbsp;·&nbsp; esc to close</p>'
+  zoomRoot.appendChild(panel)
+
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { panel.classList.add('visible') })
+  })
+
+  // Wire up close on next tick so this click doesn't immediately trigger it
+  setTimeout(function() {
+    document.addEventListener('click', close)
+    document.addEventListener('keydown', onKey)
+  }, 50)
+
+  function onKey(ev) { if (ev.key === 'Escape') close() }
+
+  function close() {
+    document.removeEventListener('click', close)
+    document.removeEventListener('keydown', onKey)
+
+    // Fade hint out
+    panel.classList.remove('visible')
+
+    // Zoom back out, then clean up
+    resetScene(550)
+    setTimeout(function() {
+      zoomRoot.innerHTML = ''
+      isZoomed = false
+    }, 570)
   }
-});
+})
