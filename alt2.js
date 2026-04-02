@@ -96,7 +96,7 @@ function zoomSceneTo(svgX, svgY, scale, durationMs) {
   const cy = window.innerHeight / 2
   const tx = cx - target.x
   const ty = cy - target.y
-  scene.style.transition      = 'transform ' + durationMs + 'ms cubic-bezier(.22,.9,.3,1)'
+  scene.style.transition      = 'transform ' + durationMs + 'ms cubic-bezier(0.16, 1, 0.3, 1)'
   scene.style.transformOrigin = target.x + 'px ' + target.y + 'px'
   scene.style.transform       = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')'
 }
@@ -123,7 +123,8 @@ document.addEventListener('click', function(e) {
   const trunkCy = parseFloat(tree.dataset.trunkCy)
 
   // Zoom the whole scene — text lives inside SVG so it zooms with it
-  zoomSceneTo(trunkCx, trunkCy, 35, 850)
+  scene.style.filter = 'brightness(1.05)'
+  zoomSceneTo(trunkCx, trunkCy, 35, 900)
 
   // Show a subtle close hint after zoom settles
   zoomRoot.innerHTML = ''
@@ -151,11 +152,12 @@ document.addEventListener('click', function(e) {
     // Fade hint out
     panel.classList.remove('visible')
 
-    // Zoom back out, then clean up
-    resetScene(550)
+    scene.style.filter = 'brightness(1)'
+    resetScene(600)
     setTimeout(function() {
       zoomRoot.innerHTML = ''
       isZoomed = false
+    }, 62oomed = false
     }, 570)
   }
 })
