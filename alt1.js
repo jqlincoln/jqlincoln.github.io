@@ -4,18 +4,37 @@ const content = {
   work:{title:'Work',items:['Placeholder: Job','Placeholder: Projects','Placeholder: Skills']}
 }
 
+// Approach: translate + scale from trunk center to viewport center using CSS transform
 document.addEventListener('click', (e)=>{
-  const t = e.target.closest('.tree');
-  if(!t) return;
-  const trunk = t.querySelector('.trunk');
+  const t = e.target.closest('.tree'); if(!t) return;
+  const trunk = t.querySelector('.trunk'); if(!trunk) return;
   const rect = trunk.getBoundingClientRect();
   const root = document.getElementById('zoom-root'); root.innerHTML='';
-  const z = document.createElement('div'); z.className='zoom-trunk';
-  z.style.left = (rect.left + rect.width/2)+'px'; z.style.top=(rect.top + rect.height/2)+'px';
-  z.style.width = rect.width+'px'; z.style.height = rect.height+'px'; z.style.transform='translate(-50%,-50%)';
-  const key = t.dataset.key; z.innerHTML = `<div class='bark-etched'><h2>${content[key].title}</h2><ul>${content[key].items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`;
+  const z = document.createElement('div'); z.className = 'zoom-trunk';
+  z.style.position = 'absolute';
+  z.style.left = rect.left + 'px';
+  z.style.top = rect.top + 'px';
+  z.style.width = rect.width + 'px';
+  z.style.height = rect.height + 'px';
+  z.style.transform = 'translate(0px,0px) scale(1)';
+  z.style.transformOrigin = '0 0';
+  z.style.willChange = 'transform';
+  const key = t.dataset.key;
+  z.innerHTML = `<div class='bark-etched'><h2>${content[key].title}</h2><ul>${content[key].items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`;
   root.appendChild(z);
-  requestAnimationFrame(()=>{ z.style.transition='all 650ms cubic-bezier(.22,.9,.3,1)'; z.classList.add('fullscreen'); z.addEventListener('transitionend', ()=>{ document.addEventListener('keydown', esc); z.addEventListener('click', close); },{once:true}) });
+
+  const cx = rect.left + rect.width/2; const cy = rect.top + rect.height/2;
+  const dx = Math.round(window.innerWidth/2 - cx);
+  const dy = Math.round(window.innerHeight/2 - cy);
+  const scale = Math.max(window.innerWidth/rect.width, window.innerHeight/rect.height) * 1.02;
+
+  requestAnimationFrame(()=>{
+    z.style.transition = 'transform 700ms cubic-bezier(.22,.9,.3,1), box-shadow 700ms';
+    z.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+  });
+
+  z.addEventListener('transitionend', onOpened, {once:true});
+  function onOpened(){ const be = z.querySelector('.bark-etched'); if(be){ be.style.display='block'; be.style.opacity='1'; } document.addEventListener('keydown', esc); z.addEventListener('click', close); }
   function esc(ev){ if(ev.key==='Escape') close(); }
-  function close(){ document.removeEventListener('keydown', esc); if(!z) return; z.classList.remove('fullscreen'); z.style.transition='all 300ms ease'; z.addEventListener('transitionend', ()=>root.innerHTML='',{once:true}) }
+  function close(){ document.removeEventListener('keydown', esc); const be = z.querySelector('.bark-etched'); if(be){ be.style.opacity='0'; } z.style.transform = 'translate(0px, 0px) scale(1)'; z.addEventListener('transitionend', ()=>{ root.innerHTML=''; },{once:true}); }
 });
