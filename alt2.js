@@ -157,7 +157,6 @@ document.addEventListener('click', function(e) {
     setTimeout(function() {
       zoomRoot.innerHTML = ''
       isZoomed = false
-    }, 62oomed = false
-    }, 570)
+    }, 620)
   }
 })
