@@ -8,3 +8,9 @@
 .zoom-trunk.fullscreen{left:0 !important;top:0 !important;width:100% !important;height:100% !important;border-radius:0}
 .bark-etched{font-family:'Special Elite',cursive;color:#e1c89d;padding:3rem;text-align:center;display:none}
 .zoom-trunk.fullscreen .bark-etched{display:block}
+
+/* ski track styling */
+#ski-track{
+	pointer-events: none;
+	opacity: 0.95;
+}
