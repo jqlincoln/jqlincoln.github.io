@@ -61,12 +61,12 @@ body {
   font-weight: 600;
   fill: #fdf8f3;
   letter-spacing: 0.3px;
-  opacity: 1;
+  opacity: 0;
   paint-order: stroke;
   stroke: #2a1810;
   stroke-width: 0.15px;
   pointer-events: none;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+  transition: opacity 180ms ease;
 }
 
 .etched-item {
@@ -76,12 +76,17 @@ body {
   font-style: italic;
   fill: #f0e5d6;
   letter-spacing: 0.2px;
-  opacity: 1;
+  opacity: 0;
   paint-order: stroke;
   stroke: #1a0e08;
   stroke-width: 0.1px;
   pointer-events: none;
-  text-shadow: 0.8px 0.8px 1.5px rgba(0,0,0,0.35);
+  transition: opacity 180ms ease;
+}
+
+.tree.tree-selected .etched-title,
+.tree.tree-selected .etched-item {
+  opacity: 1;
 }
 
 /* ── Zoom overlay — only used for close hint now ── */
@@ -96,9 +101,9 @@ body {
   position: fixed;
   inset: 0;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  padding-bottom: 2.5rem;
+  padding: 1.5rem;
   pointer-events: all;
   opacity: 0;
   transition: opacity 300ms ease 600ms;
@@ -114,6 +119,72 @@ body {
   text-transform: uppercase;
   font-weight: 400;
   text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.details-card {
+  width: min(92vw, 420px);
+  border: 1px solid rgba(245, 229, 206, 0.34);
+  border-radius: 16px;
+  padding: 1.2rem 1.15rem 1rem;
+  background: linear-gradient(160deg, rgba(18, 10, 6, 0.82), rgba(52, 28, 14, 0.72));
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(4px);
+}
+
+.details-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  color: #fff4e2;
+  font-size: clamp(1.45rem, 3.8vw, 2rem);
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  margin-bottom: 0.55rem;
+  text-align: left;
+}
+
+.details-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.details-list li {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  color: #f2e2cb;
+  font-size: clamp(1.02rem, 2.8vw, 1.28rem);
+  line-height: 1.3;
+  text-align: left;
+  opacity: 0;
+  transform: translateX(10px);
+  animation: reveal-left 340ms ease forwards;
+}
+
+.details-list li + li {
+  margin-top: 0.24rem;
+}
+
+.details-list li:nth-child(1) { animation-delay: 40ms; }
+.details-list li:nth-child(2) { animation-delay: 110ms; }
+.details-list li:nth-child(3) { animation-delay: 180ms; }
+
+.details-footer {
+  margin-top: 0.85rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(238, 220, 191, 0.7);
+  text-align: left;
+}
+
+@keyframes reveal-left {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* ski track */

@@ -108,6 +108,7 @@ function resetScene(durationMs) {
 
 // ─── State ────────────────────────────────────────────────────────────────────
 let isZoomed = false
+let activeTree = null
 
 // ─── Click handler ────────────────────────────────────────────────────────────
 document.addEventListener('click', function(e) {
@@ -119,6 +120,11 @@ document.addEventListener('click', function(e) {
   if (!tree) return
 
   isZoomed = true
+  activeTree = tree
+  activeTree.classList.add('tree-selected')
+
+  const treeKey = tree.dataset.key
+  const treeContent = content[treeKey] || { title: '', items: [] }
   const trunkCx = parseFloat(tree.dataset.trunkCx)
   const trunkCy = parseFloat(tree.dataset.trunkCy)
 
@@ -130,7 +136,14 @@ document.addEventListener('click', function(e) {
   zoomRoot.innerHTML = ''
   const panel = document.createElement('div')
   panel.className = 'bark-panel'
-  panel.innerHTML = '<p class="close-hint">click anywhere &nbsp;·&nbsp; esc to close</p>'
+  panel.innerHTML =
+    '<div class="details-card">' +
+      '<h2 class="details-title">' + treeContent.title + '</h2>' +
+      '<ul class="details-list">' +
+        treeContent.items.map(function(item) { return '<li>' + item + '</li>' }).join('') +
+      '</ul>' +
+      '<p class="details-footer">click anywhere or press esc to close</p>' +
+    '</div>'
   zoomRoot.appendChild(panel)
 
   requestAnimationFrame(function() {
@@ -148,6 +161,11 @@ document.addEventListener('click', function(e) {
   function close() {
     document.removeEventListener('click', close)
     document.removeEventListener('keydown', onKey)
+
+    if (activeTree) {
+      activeTree.classList.remove('tree-selected')
+      activeTree = null
+    }
 
     // Fade hint out
     panel.classList.remove('visible')
