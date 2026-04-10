@@ -3,139 +3,105 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jordan Lincoln | Winter Forest Portfolio</title>
+  <title>Jasper Lincoln | UBC Political Science and Data Science</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
-  <a class="skip-link" href="#details-panel">Skip to details</a>
+  <a class="skip-link" href="#profile-grid">Skip to profile grid</a>
 
   <header class="topbar">
-    <p class="brand">Jordan Lincoln</p>
+    <p class="brand">Jasper Lincoln</p>
     <a class="topbar-link" href="#contact">Contact</a>
   </header>
 
   <main class="page">
     <section class="hero" aria-labelledby="hero-title">
-      <p class="hero-kicker">Welcome</p>
-      <h1 id="hero-title">Explore my work through a winter forest map</h1>
-      <p class="hero-copy">Choose a tree to zoom in and see what I do. This page is designed to be simple, visual, and easy to navigate even if you are not technical.</p>
-      <nav class="category-nav" aria-label="Main categories">
-        <button type="button" class="chip" data-select-key="hobbies">Hobbies</button>
-        <button type="button" class="chip" data-select-key="academics">Academics</button>
-        <button type="button" class="chip" data-select-key="work">Work</button>
-        <button type="button" class="chip chip-muted" id="reset-view">Reset View</button>
-      </nav>
+      <p class="hero-kicker">Vancouver, British Columbia, Canada</p>
+      <h1 id="hero-title">Jasper Lincoln</h1>
+      <p class="hero-copy">I started post-secondary in engineering at UBC in 2022, then shifted to political science and data science to better align with my interests in political systems and the growing role of data in a rapidly changing world.</p>
     </section>
 
-    <section class="scene-shell" aria-label="Interactive forest scene">
-      <svg id="main-scene" class="scene" viewBox="0 0 1600 980" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Snowy forest with three trees for Hobbies, Academics, and Work">
-        <defs>
-          <linearGradient id="sky-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#a5dbff" />
-            <stop offset="100%" stop-color="#f4fbff" />
-          </linearGradient>
-          <linearGradient id="snow-grad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#ffffff" />
-            <stop offset="100%" stop-color="#dbeaf6" />
-          </linearGradient>
-          <linearGradient id="mountain-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#d7ebfb" />
-            <stop offset="100%" stop-color="#b9d3e8" />
-          </linearGradient>
-          <linearGradient id="trunk-grad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#684021" />
-            <stop offset="45%" stop-color="#8a5330" />
-            <stop offset="100%" stop-color="#5b3319" />
-          </linearGradient>
-          <radialGradient id="ground-shadow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#2e4a3e" stop-opacity="0.34" />
-            <stop offset="100%" stop-color="#27483a" stop-opacity="0" />
-          </radialGradient>
-        </defs>
-
-        <rect x="0" y="0" width="1600" height="980" fill="url(#sky-grad)" />
-        <path d="M130,450 L460,220 L770,450 Z" fill="url(#mountain-grad)" opacity="0.7" />
-        <path d="M720,470 L1040,230 L1380,470 Z" fill="url(#mountain-grad)" opacity="0.63" />
-        <path d="M0,520 C210,430 520,440 810,380 C1120,315 1360,380 1600,330 L1600,980 L0,980 Z" fill="url(#snow-grad)" />
-        <path d="M130,760 C450,700 910,720 1290,640" fill="none" stroke="#b9d2e4" stroke-width="26" stroke-linecap="round" opacity="0.6" />
-
-        <g id="scene-stage">
-          <g class="tree" tabindex="0" role="button" aria-label="Hobbies tree" data-key="hobbies" data-cx="360" data-cy="560">
-            <ellipse cx="360" cy="770" rx="120" ry="28" fill="url(#ground-shadow)" />
-            <g class="foliage" transform="translate(360,420)">
-              <polygon points="0,-100 -96,130 96,130" fill="#57cb7b"/>
-              <polygon points="0,-20 -116,186 116,186" fill="#46b96a"/>
-              <polygon points="0,70 -138,248 138,248" fill="#339953"/>
-            </g>
-            <rect x="326" y="664" width="68" height="130" rx="10" fill="url(#trunk-grad)" />
-            <text class="tree-label" x="360" y="712" text-anchor="middle">Hobbies</text>
-          </g>
-
-          <g class="tree" tabindex="0" role="button" aria-label="Academics tree" data-key="academics" data-cx="820" data-cy="470">
-            <ellipse cx="820" cy="676" rx="125" ry="28" fill="url(#ground-shadow)" />
-            <g class="foliage" transform="translate(820,326)">
-              <polygon points="0,-100 -96,130 96,130" fill="#57cb7b"/>
-              <polygon points="0,-20 -116,186 116,186" fill="#46b96a"/>
-              <polygon points="0,70 -138,248 138,248" fill="#339953"/>
-            </g>
-            <rect x="786" y="570" width="68" height="130" rx="10" fill="url(#trunk-grad)" />
-            <text class="tree-label" x="820" y="618" text-anchor="middle">Academics</text>
-          </g>
-
-          <g class="tree" tabindex="0" role="button" aria-label="Work tree" data-key="work" data-cx="1240" data-cy="600">
-            <ellipse cx="1240" cy="810" rx="120" ry="28" fill="url(#ground-shadow)" />
-            <g class="foliage" transform="translate(1240,460)">
-              <polygon points="0,-100 -96,130 96,130" fill="#57cb7b"/>
-              <polygon points="0,-20 -116,186 116,186" fill="#46b96a"/>
-              <polygon points="0,70 -138,248 138,248" fill="#339953"/>
-            </g>
-            <rect x="1206" y="704" width="68" height="130" rx="10" fill="url(#trunk-grad)" />
-            <text class="tree-label" x="1240" y="752" text-anchor="middle">Work</text>
-          </g>
-        </g>
-      </svg>
-
-      <p class="scene-tip">Tip: click a tree or the category buttons above to zoom and explore.</p>
-    </section>
-
-    <section class="details" id="details-panel" aria-live="polite">
-      <article class="detail-card">
-        <p class="eyebrow">Now Viewing</p>
-        <h2 id="detail-title">Choose a tree to begin</h2>
-        <p id="detail-body">Select Hobbies, Academics, or Work and the scene will zoom in automatically while this panel shows the details.</p>
-        <div id="detail-list" class="detail-list"></div>
+    <section class="bento" id="profile-grid" aria-label="Jasper Lincoln profile bento layout">
+      <article class="bento-card category-card about-card">
+        <h2>About</h2>
+        <p>From engineering to political science and data science, with strong leadership and communication focus.</p>
+        <div class="about-points">
+          <article class="about-point">
+            <h3>Academic pivot</h3>
+            <p>Started at UBC in Applied Science (Engineering), then shifted into Political Science and Data Science.</p>
+          </article>
+          <article class="about-point">
+            <h3>Current lens</h3>
+            <p>Explores political systems and how data increasingly shapes decision-making in a changing world.</p>
+          </article>
+        </div>
       </article>
 
-      <article class="trust-card" id="about">
-        <h2>About Me</h2>
-        <p>I make ideas understandable. Whether I am learning, building, or creating, I focus on clear communication and practical outcomes.</p>
+      <article class="bento-card spotlight-card">
+        <h2>Experience Timeline</h2>
+        <div class="detail-list">
+          <article class="detail-item">
+            <p class="role-tag">Now</p>
+            <h3>Product Guide, Arc'teryx Equipment</h3>
+            <p>Permanent part-time, Jul 2025 to present, Vancouver.</p>
+          </article>
+          <article class="detail-item">
+            <p class="role-tag">Community</p>
+            <h3>Project Member, Dyslexia Canada</h3>
+            <p>Contract part-time, Jun 2024 to Aug 2025 (1 year 3 months).</p>
+          </article>
+          <article class="detail-item">
+            <p class="role-tag">Retail</p>
+            <h3>Retail Sales Associate</h3>
+            <p>West Point Cycles (Mar 2023 to Apr 2025) and Cycle Solutions (Jun 2021 to Aug 2022).</p>
+          </article>
+        </div>
       </article>
 
-      <article class="trust-card">
-        <h2>Examples</h2>
-        <ul>
-          <li>Built and maintained personal projects with clear, user-friendly interfaces.</li>
-          <li>Delivered work that balances creativity, planning, and execution.</li>
-          <li>Continuously improve workflows to make information easier to use.</li>
+      <article class="bento-card category-card education-card">
+        <h2>Education</h2>
+        <div class="edu-stack">
+          <article class="edu-item">
+            <p class="edu-time">Sep 2022 - Apr 2027</p>
+            <h3>The University of British Columbia</h3>
+            <p>Bachelor's degree with a major in Political Science and a minor in Data Science.</p>
+          </article>
+          <article class="edu-item">
+            <p class="edu-time">Sep 2018 - Jun 2022</p>
+            <h3>Leaside High School</h3>
+            <p>High School Diploma with strong math performance and technical extracurricular involvement.</p>
+          </article>
+        </div>
+      </article>
+
+      <article class="bento-card achievements-card" id="about">
+        <h2>Awards and Achievements</h2>
+        <ul class="achievement-list">
+          <li><strong>Outstanding Achievement in Mathematics</strong><span>Grades 10 and 11</span></li>
+          <li><strong>VEX Robotics Team</strong><span>Member and builder</span></li>
+          <li><strong>FIS Alpine Ski Team</strong><span>Competitive athlete</span></li>
         </ul>
       </article>
 
-      <article class="cta-card" id="contact">
-        <h2>Let&apos;s Talk</h2>
-        <p>If you want to collaborate or learn more, reach out directly.</p>
-        <a href="mailto:jordan@example.com">jordan@example.com</a>
+      <article class="bento-card cta-card voc-card" id="contact">
+        <p class="eyebrow">Varsity Outdoors Club</p>
+        <h2>VOC Leadership</h2>
+        <p>Executive at the Varsity Outdoors Club at UBC, supporting outdoor community events and student involvement.</p>
+        <ul class="mini-list">
+          <li>Helps coordinate and support club activity planning.</li>
+          <li>Regularly ski tours and climbs in Squamish.</li>
+          <li>Brings leadership, communication, and teamwork from outdoors into academic and professional settings.</li>
+        </ul>
       </article>
     </section>
   </main>
 
   <footer class="footer">
-    <p>Winter Forest Portfolio</p>
-    <p>Easy navigation, clear language, and human-centered design.</p>
+    <p>Jasper Lincoln 2026</p>
+    <!-- <p>Political Science and Data Science at UBC</p> -->
   </footer>
-
-  <script src="index.js"></script>
 </body>
 </html>
